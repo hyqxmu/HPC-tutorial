@@ -1,0 +1,53 @@
+#Shark cluster @ MDAnderson Cancer Center
+#login node (or data storage directory): /rsrch1
+/rsrch1/radonc_rsrch/yhuang10
+#home directory: /rsrch2
+/rsrch2/radonc_rsrch/yhuang10
+#Use Secure Shell (SSH):
+ssh shark.mdanderson.edu
+#Your login password will be the same as your email password
+#Storage: ./rsrch2    ./rsrch1
+#Copying data between filesystems
+#Copy data to /rsrch2:
+rsync -av /rsrch1/DEPT/username/dir/filename /rsrch2/DEPT/username/dir
+#Copy folder to your current working directory:
+cp -r /rsrch1/DEPT/username/dir .
+#Copy file to your current working directory:
+cp /rsrch1/DEPT/username/dir/filename .
+#Copy all the files in a folder to your current working directory:
+cp /rsrch1/DEPT/username/dir/* .
+#Copy data to /rsrch1:
+rsync -av /rsrch2/DEPT/username/dir/filename /rsrch1/DEPT/username/dir
+#Copy HPC data to your local computer: open the terminal window in your local computer and navigate to the destination folder and run the command below.
+rsync -av yhuang10@shark.mdanderson.edu:/rsrch1/radonc_rsrch/yhuang10/filename .
+#Copy data from your local computer to HPC:open the terminal window in your local computer and navigate to the destination folder and run the command below.
+rsync -av /Users/yhuang10/dir/filename yhuang10@shark.mdanderson.edu:/rsrch1/radonc_rsrch/yhuang10/dir
+#run a program using interactive jobs mode:
+bsub -Is -q interactive -W 1:00 -M 16384 -R rusage[mem=16384] -n 1 /bin/bash
+#run a program using LSF job submission script:
+
+#BSUB -J Tophat2_Sample_13-19.sh
+#BSUB -W 96:00
+#BSUB -o /rsrch2/radonc_rsrch/yhuang10/Project304_Data
+#BSUB -e /rsrch2/radonc_rsrch/yhuang10/Project304_Data
+#BSUB -cwd /rsrch2/radonc_rsrch/yhuang10/Project304_Data
+#BSUB -q long
+#BSUB -u yhuang10@mdanderson.org
+#BSUB -n 12
+#BSUB -M 32768
+#BSUB -R rusage[mem=32768]
+#BSUB -B
+#BSUB -N
+
+#!/bin/bash
+# This is to align the reads with Tophat2
+module load tophat2/2.1.1
+module load bowtie2/2.2.3
+module load samtools/1.4
+tophat2 -p 8 -G Mus_musculus.GRCm38.89.gtf -o Sample_13 Mus_musculus.GRCm38 ./Sample_13/Sample13_R1.fastq ./Sample_13/Sample13_R2.fastq
+tophat2 -p 8 -G Mus_musculus.GRCm38.89.gtf -o Sample_14 Mus_musculus.GRCm38 ./Sample_14/Sample14_R1.fastq ./Sample_14/Sample14_R2.fastq
+tophat2 -p 8 -G Mus_musculus.GRCm38.89.gtf -o Sample_15 Mus_musculus.GRCm38 ./Sample_15/Sample15_R1.fastq ./Sample_15/Sample15_R2.fastq
+tophat2 -p 8 -G Mus_musculus.GRCm38.89.gtf -o Sample_16 Mus_musculus.GRCm38 ./Sample_16/Sample16_R1.fastq ./Sample_16/Sample16_R2.fastq
+tophat2 -p 8 -G Mus_musculus.GRCm38.89.gtf -o Sample_17 Mus_musculus.GRCm38 ./Sample_17/Sample17_R1.fastq ./Sample_17/Sample17_R2.fastq
+tophat2 -p 8 -G Mus_musculus.GRCm38.89.gtf -o Sample_18 Mus_musculus.GRCm38 ./Sample_18/Sample18_R1.fastq ./Sample_18/Sample18_R2.fastq
+tophat2 -p 8 -G Mus_musculus.GRCm38.89.gtf -o Sample_19 Mus_musculus.GRCm38 ./Sample_19/Sample19_R1.fastq ./Sample_19/Sample19_R2.fastq
